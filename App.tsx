@@ -1,12 +1,20 @@
-import "./global.css"
+import Button from "@/src/Components/Common/Button";
 import { Text, View } from "react-native";
- 
+import "./global.css";
+
 export default function App() {
   return (
     <View className="flex-1 items-center justify-center bg-white">
       <Text className="text-xl font-bold text-blue-500">
         Welcome to Nativewind!
       </Text>
+
+      <Button
+        title="OK"
+        onPress={() => {
+          console.log("Pressed");
+        }}
+      />
     </View>
   );
 }
