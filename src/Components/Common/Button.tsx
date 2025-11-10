@@ -4,25 +4,37 @@ import { Pressable, Text, View } from "react-native";
 type ButtonProps = {
   title?: string;
   onPress?: () => void;
+  style?: "normal" | "gray";
 };
 
-const styles = {};
-
-const Button = ({ title = "Click Me", onPress }: ButtonProps) => {
-  const [Pressed, setPressed] = useState(false);
+const Button = ({
+  title = "Click Me",
+  onPress,
+  style = "normal",
+}: ButtonProps) => {
+  const [isPressed, setIsPressed] = useState(false);
 
   return (
-    <View className="size-fit">
+    <View className="relative w-48 h-20">
       <View
-        className={`-z-10 h-4 bg-[#E04E00] absolute bottom-0 left-0 right-0 translate-y-1 rounded-b-md ${Pressed ? "hidden" : ""}`}
+        className={`absolute inset-x-0 bottom-0 h-8 rounded-b-lg ${
+          style === "normal" ? "bg-[#E04E00]" : "bg-[#4A4040]"
+        }`}
+        style={{ transform: [{ translateY: 6 }], zIndex: -1 }}
       />
+
       <Pressable
-        className={`bg-[#FA5700] px-12 py-2 rounded-md ${Pressed ? "translate-y-1" : ""}`}
         onPress={onPress}
-        onPressIn={() => setPressed(true)}
-        onPressOut={() => setPressed(false)}
+        onPressIn={() => setIsPressed(true)}
+        onPressOut={() => setIsPressed(false)}
+        className={`w-full h-full rounded-lg items-center justify-center ${
+          style === "normal" ? "bg-[#FA5700]" : "bg-[#605050]"
+        }`}
+        style={{
+          transform: [{ translateY: isPressed ? 6 : 0 }],
+        }}
       >
-        <Text className="text-white text-3xl select-none">{title}</Text>
+        <Text className="text-white text-3xl font-semibold">{title}</Text>
       </Pressable>
     </View>
   );
