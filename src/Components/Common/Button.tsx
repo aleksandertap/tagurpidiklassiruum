@@ -7,7 +7,7 @@ type ButtonProps = {
   style?: "normal" | "gray";
 };
 
-const Button = ({
+export const Button = ({
   title = "Click Me",
   onPress,
   style = "normal",
@@ -39,5 +39,3 @@ const Button = ({
     </View>
   );
 };
-
-export default Button;
