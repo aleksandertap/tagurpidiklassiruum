@@ -3,30 +3,26 @@ import { Pressable, Text, View } from "react-native";
 
 type KeyboardButtonProps = {
   keyLabel: string;
-  state?: "default" | "correct" | "present" | "absent" | "disabled";
+  state?: "default" | "correct" | "present" | "disabled";
   onPress?: () => void;
 };
 
 const colors = {
   default: {
-    background: "#6F5C5C",
-    shadow: "#4A4040",
+    background: "bg-[#6F5C5C]",
+    shadow: "bg-[#4A4040]",
   },
   correct: {
-    background: "#6AAA64",
-    shadow: "#4A7C4A",
+    background: "bg-[#6AAA64]",
+    shadow: "bg-[#4A7C4A]",
   },
   present: {
-    background: "#C9B458",
-    shadow: "#8F7E3A",
-  },
-  absent: {
-    background: "#787C7E",
-    shadow: "#4D5051",
+    background: "bg-[#C9B458]",
+    shadow: "bg-[#8F7E3A]",
   },
   disabled: {
-    background: "#000000",
-    shadow: "#000000",
+    background: "bg-[#000000]",
+    shadow: "bg-[#000000]",
   },
 };
 
@@ -52,17 +48,17 @@ export const KeyboardButton = ({
   return (
     <View>
       <View
-        className={`absolute inset-x-0 bottom-0 h-8 rounded-b-md bg-[${shadow}]`}
+        className={`absolute inset-x-0 bottom-0 h-8 rounded-b-md ${shadow}`}
         style={{ transform: [{ translateY: 4 }], zIndex: -1 }}
       />
 
       <Pressable
-        className={`w-8 h-12 bg-[${background}] flex items-center justify-center rounded-md`}
+        className={`w-8 h-12 ${background} flex items-center justify-center rounded-md`}
         onPress={isDisabled ? () => {} : onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         style={{
-          transform: [{ translateY: isPressed ? 4 : 0 }],
+          transform: [{ translateY: isPressed || isDisabled ? 4 : 0 }],
         }}
       >
         <Text className={`text-lg text-white`}>{keyLabel}</Text>
