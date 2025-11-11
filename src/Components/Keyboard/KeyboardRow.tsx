@@ -13,7 +13,7 @@ export const KeyboardRow = ({ keys }: KeyboardRowProps) => {
           key={key}
           keyLabel={key}
           onPress={() => {
-            console.log("Pressed");
+            console.log(`pressed key ${key}`);
           }}
         />
       ))}
