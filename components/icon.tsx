@@ -36,6 +36,7 @@ export default function Icon({type, color = '#fff'}: IconProps) {
 }
 
 // KÕIK APP KOMPONENDIGA SEOTUD KOOD ON EEMALDATUD
+//trtr
 // Stiilid jäävad alles, aga ainult need, mida Icon vajab
 const styles = StyleSheet.create({
  //icon styles

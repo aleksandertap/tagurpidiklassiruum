@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',    // paigutab kastid kõrvuti
     padding: 20,
-    // React Native ei toeta 'gap', kasuta margin kastidel
+    // React Native ei toeta 'gap', kasuta margin kastidel.
   },
 });
 
