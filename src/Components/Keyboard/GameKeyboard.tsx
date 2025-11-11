@@ -1,22 +1,28 @@
+import { KeyboardProvider } from "@/src/Context/KeyboardContext";
 import React from "react";
 import { View } from "react-native";
 import { KeyboardRow } from "./KeyboardRow";
 
-type KeyboardRow = {
+type KeyboardRowProps = {
   keys: string[];
 };
 
 type KeyboardProps = {
-  rows: KeyboardRow[];
+  rows: KeyboardRowProps[];
+  onInput: (key: string, row: number, index: number) => void;
 };
 
-export const GameKeyboard = ({ rows }: KeyboardProps) => {
+export const GameKeyboard = ({ rows, onInput }: KeyboardProps) => {
   return (
-    <View className="flex flex-col gap-3 w-full">
-      {rows.map((row, index) => (
-        <KeyboardRow key={index} keys={row.keys} />
-      ))}
-    </View>
+    <KeyboardProvider
+      onKeyPress={({ key, row, index }) => onInput(key, row, index)}
+    >
+      <View className="flex flex-col gap-3 w-full">
+        {rows.map((row, index) => (
+          <KeyboardRow key={index} rowIndex={index} keys={row.keys} />
+        ))}
+      </View>
+    </KeyboardProvider>
   );
 };
 
