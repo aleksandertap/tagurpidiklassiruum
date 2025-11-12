@@ -3,6 +3,8 @@ import { Pressable, Text, View } from "react-native";
 
 type KeyboardButtonProps = {
   keyLabel: string;
+  keyIndex: number;
+  rowIndex: number;
   state?: "default" | "correct" | "present" | "disabled";
   onPress?: () => void;
 };
