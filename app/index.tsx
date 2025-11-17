@@ -3,7 +3,7 @@ import App from "../App";
 
 export default function Index() {
   return (
-    <View>
+    <View className="bg-white h-screen w-screen">
       <App />
     </View>
   );
