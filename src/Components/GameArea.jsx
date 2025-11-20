@@ -19,7 +19,7 @@ const GameArea = () => {
   const { word, definition } = currentWord;
 
   return (
-    <View className="flex justify-between items-center w-full h-full">
+    <View className="flex justify-between items-center w-full h-full pb-3">
       <View className="flex-row justify-between w-full px-8 py-5">
         {/* Sander ikoonid */}
         <Text>Icon1</Text>
