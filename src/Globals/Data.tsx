@@ -1639,8 +1639,8 @@ export const data = [
   },
   {
     id: 274,
-    word: "en face",
-    definition: "eest vaadatult, eestvaates, osevaates",
+    word: "süntees",
+    definition: "algosade vm koostisosade ühendamine, nendest (mõttelise) terviku moodustamine",
     active: true
   },
   {
@@ -1711,8 +1711,8 @@ export const data = [
   },
   {
     id: 286,
-    word: "ersa",
-    definition: "Mordva vabariigi idaosas elava soome-ugri rahva liige",
+    word: "jalg",
+    definition: "vana rahvapärane pikkusmõõt, umbes 30 cm; Inglise mõõdustiku pikkusühik, 12 tolli ehk umbes 30 cm",
     active: true
   },
   {
@@ -13532,7 +13532,7 @@ export const data = [
   {
     id: 2256,
     word: "üksjalg",
-    definition: "15.–17. sajandil Eestis väljaspool kogukonnamaad asunud talupoeg, kes tegi mõisale teolisena ühe hobuseta tööpäeva nädalas",
+    definition: "15.-17. sajandil Eestis väljaspool kogukonnamaad asunud talupoeg, kes tegi mõisale teolisena ühe hobuseta tööpäeva nädalas",
     active: true
   },
   {
