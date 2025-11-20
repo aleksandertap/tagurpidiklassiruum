@@ -18,7 +18,7 @@ export default function LetterBox({ bgColor = "bg-[#E8E8E8]", onPress, text }) {
       className={`w-[50px] h-[50px] ${bgColor} flex items-center justify-center rounded-md`}
       onPress={onPress}
     >
-      {!isTextVisible && (
+      {isTextVisible && (
         <Text className="text-3xl font-semibold text-black text-center leading-[50px]">
           {String(text || " ")
             .toUpperCase()
