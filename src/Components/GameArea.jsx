@@ -10,6 +10,15 @@ import { data } from "@/src/Globals/Data";
 
 const GameArea = () => {
   const [currentWord, setCurrentWord] = useState({});
+  const [currentAttempt, setCurrentAttempt] = useState("");
+
+  const handleInput = useCallback((key) => {
+    const keyUpper = key.toUpperCase();
+    if (key.length === 1) {
+      setCurrentAttempt((prev) => prev + keyUpper);
+    }
+  }, []);
+
   useEffect(() => {
     const activeWords = data.filter((word) => word.active === true);
     const randomWord = getRandomWord(activeWords);
@@ -29,15 +38,15 @@ const GameArea = () => {
         <QuestionArea body={definition} />
         {/* esimene olema disabled vms, ja kuvab eelmist pakkumist */}
         <View className="py-5">
-          <AnswerField correctWord={word} />
-          <AnswerField correctWord={word} />
+          <AnswerField correctWord={word} currentAttempt={currentAttempt} />
+          <AnswerField correctWord={word} currentAttempt={currentAttempt} />
         </View>
       </View>
       <View className="flex-row justify-between w-screen px-[35px]">
         <Button />
         <Button style="gray" />
       </View>
-      <GameKeyboard rows={rows} onInput={() => console.log("pressed")} />
+      <GameKeyboard rows={rows} onInput={handleInput} />
     </View>
   );
 };

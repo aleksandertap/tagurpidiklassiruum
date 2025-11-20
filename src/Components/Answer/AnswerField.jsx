@@ -7,14 +7,15 @@ import { View } from "react-native";
  *  {string} correctWord - The correct word to compare against.
  */
 
-export default function AnswerField({ attemptWord = "", correctWord = "" }) {
+export default function AnswerField({ currentAttempt ="", correctWord = "" }) {
+  
   return (
     <View className="p-4 mx-4 flex flex-row justify-center gap-1">
       {/* Renders letter boxes for each character in the correctWord */}
       {correctWord.split("").map((_, i) => (
         <LetterBox
           key={i}
-          text={(attemptWord.charAt(i) || "").toUpperCase()}
+          text={(currentAttempt.charAt(i) || "").toUpperCase()}
           bgColor="bg-[#E8E8E8]"
         />
       ))}
