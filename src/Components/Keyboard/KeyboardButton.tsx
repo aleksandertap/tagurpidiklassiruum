@@ -1,68 +1,66 @@
 import React, { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type KeyboardButtonProps = {
   keyLabel: string;
+  keyIndex?: number;
+  rowIndex?: number;
   state?: "default" | "correct" | "present" | "disabled";
   onPress?: () => void;
 };
 
 const colors = {
-  default: {
-    background: "bg-[#6F5C5C]",
-    shadow: "bg-[#4A4040]",
-  },
-  correct: {
-    background: "bg-[#6AAA64]",
-    shadow: "bg-[#4A7C4A]",
-  },
-  present: {
-    background: "bg-[#C9B458]",
-    shadow: "bg-[#8F7E3A]",
-  },
-  disabled: {
-    background: "bg-[#000000]",
-    shadow: "bg-[#000000]",
-  },
+  default: { background: "#6F5C5C", shadow: "#4A4040" },
+  correct: { background: "#6AAA64", shadow: "#4A7C4A" },
+  present: { background: "#C9B458", shadow: "#8F7E3A" },
+  disabled: { background: "#000000", shadow: "#000000" },
 };
 
-export const KeyboardButton = ({
-  keyLabel,
-  state = "default",
-  onPress,
-}: KeyboardButtonProps) => {
+export const KeyboardButton = ({ keyLabel, state = "default", onPress }: KeyboardButtonProps) => {
   const [isPressed, setIsPressed] = useState(false);
   const isDisabled = state === "disabled";
   const { background, shadow } = colors[state];
 
-  const handlePressIn = () => {
-    if (isDisabled) return;
-    setIsPressed(true);
-  };
-
-  const handlePressOut = () => {
-    if (isDisabled) return;
-    setIsPressed(false);
-  };
-
   return (
-    <View>
-      <View
-        className={`absolute inset-x-0 bottom-0 h-8 rounded-b-md ${shadow}`}
-        style={{ transform: [{ translateY: 4 }], zIndex: -1 }}
-      />
+    <View style={{ marginHorizontal: 2 }}>
+      {/* Varju kast */}
+      <View style={[styles.shadow, { backgroundColor: shadow }]} />
 
+      {/* Pressable nupp */}
       <Pressable
-        className={`w-8 h-12 ${background} flex items-center justify-center rounded-md`}
-        onPress={isDisabled ? () => {} : onPress}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        style={{
-          transform: [{ translateY: isPressed || isDisabled ? 4 : 0 }],
-        }}
+        style={[styles.button, { backgroundColor: background }]}
+        onPress={isDisabled ? undefined : onPress}
+        onPressIn={() => !isDisabled && setIsPressed(true)}
+        onPressOut={() => !isDisabled && setIsPressed(false)}
       >
-        <Text className={`text-lg text-white`}>{keyLabel}</Text>
+        <Text style={styles.text}>{keyLabel}</Text>
       </Pressable>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  shadow: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 8,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    transform: [{ translateY: 4 }],
+    zIndex: -1,
+  },
+  button: {
+    width: 32,
+    height: 48,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    fontSize: 18,
+    color: "#fff",
+    textAlign: "center",
+  },
+});

@@ -7,34 +7,43 @@ type ButtonProps = {
   style?: "normal" | "gray";
 };
 
-export const Button = ({
-  title = "Click Me",
-  onPress,
-  style = "normal",
-}: ButtonProps) => {
+export const Button = ({ title = "Click Me", onPress, style = "normal" }: ButtonProps) => {
   const [isPressed, setIsPressed] = useState(false);
 
-  return (
-    <View className="relative w-48 h-20">
-      <View
-        className={`absolute inset-x-0 bottom-0 h-8 rounded-b-lg ${
-          style === "normal" ? "bg-[#E04E00]" : "bg-[#4A4040]"
-        }`}
-        style={{ transform: [{ translateY: 6 }], zIndex: -1 }}
-      />
+  const bgColor = style === "normal" ? "#FA5700" : "#605050";
+  const shadowColor = style === "normal" ? "#E04E00" : "#4A4040";
 
+  return (
+    <View style={{ width: 192, height: 80, position: 'relative' }}>
+      <View
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 32,
+          borderBottomLeftRadius: 12,
+          borderBottomRightRadius: 12,
+          backgroundColor: shadowColor,
+          transform: [{ translateY: 6 }],
+          zIndex: -1,
+        }}
+      />
       <Pressable
         onPress={onPress}
         onPressIn={() => setIsPressed(true)}
         onPressOut={() => setIsPressed(false)}
-        className={`w-full h-full rounded-lg items-center justify-center ${
-          style === "normal" ? "bg-[#FA5700]" : "bg-[#605050]"
-        }`}
         style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: 12,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: bgColor,
           transform: [{ translateY: isPressed ? 6 : 0 }],
         }}
       >
-        <Text className="text-white text-3xl font-semibold">{title}</Text>
+        <Text style={{ color: '#fff', fontSize: 24, fontWeight: '600' }}>{title}</Text>
       </Pressable>
     </View>
   );

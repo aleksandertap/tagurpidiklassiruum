@@ -1,22 +1,36 @@
-import { View } from "react-native";
+import { useKeyboardContext } from "@/src/Context/KeyboardContext";
+import { StyleSheet, View } from "react-native";
 import { KeyboardButton } from "./KeyboardButton";
 
 type KeyboardRowProps = {
+  rowIndex: number;
   keys: string[];
 };
 
-export const KeyboardRow = ({ keys }: KeyboardRowProps) => {
+export const KeyboardRow = ({ keys, rowIndex }: KeyboardRowProps) => {
+  const keyboard = useKeyboardContext();
+
   return (
-    <View className="w-full flex flex-row justify-center gap-1">
-      {keys.map((key) => (
+    <View style={styles.row}>
+      {keys.map((key, keyIndex) => (
         <KeyboardButton
           key={key}
           keyLabel={key}
+          keyIndex={keyIndex}
+          rowIndex={rowIndex}
           onPress={() => {
-            console.log(`pressed key ${key}`);
+            keyboard.onKeyPress(key, rowIndex, keyIndex);
           }}
         />
       ))}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  row: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+});
