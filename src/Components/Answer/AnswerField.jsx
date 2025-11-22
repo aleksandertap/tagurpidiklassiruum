@@ -7,8 +7,14 @@ import { View } from "react-native";
  *  {string} correctWord - The correct word to compare against.
  */
 
-export default function AnswerField({ currentAttempt ="", correctWord = "" }) {
-  
+const colors = {
+  neutral: "bg-[#E8E8E8]",
+  incorrect: "bg-[#FF3D36]",
+  present: "bg-[#FF3D36]",
+  correct: "bg-[#68FF4A]",
+};
+
+export default function AnswerField({ currentAttempt = "", correctWord = "" }) {
   return (
     <View className="p-4 mx-4 flex flex-row justify-center gap-1">
       {/* Renders letter boxes for each character in the correctWord */}
@@ -16,7 +22,7 @@ export default function AnswerField({ currentAttempt ="", correctWord = "" }) {
         <LetterBox
           key={i}
           text={(currentAttempt.charAt(i) || "").toUpperCase()}
-          bgColor="bg-[#E8E8E8]"
+          bgColor={colors.neutral}
         />
       ))}
     </View>
