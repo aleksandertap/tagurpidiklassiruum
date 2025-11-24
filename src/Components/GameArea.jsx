@@ -4,7 +4,7 @@ import Modal from "@/src/Components/Common/Modal";
 import Icon from "@/src/Components/Icon/Icon.tsx";
 import GameKeyboard from "@/src/Components/Keyboard/GameKeyboard";
 import QuestionArea from "@/src/Components/Question/QuestionArea";
-import { getRandomWord } from "@/src/Components/Utils/utils";
+import { deactivateWord, getRandomWord } from "@/src/Components/Utils/utils";
 import { data } from "@/src/Globals/Data";
 import { rows } from "@/src/Globals/KeyboardRows";
 import React, { useCallback, useEffect, useState } from "react";
@@ -69,6 +69,8 @@ const GameArea = () => {
   };
 
   const handleCorrectGuess = () => {
+    deactivateWord(data, currentWord.id);
+    setLastAttempt("");
     setCurrentAttempt("");
     setCurrentWord(getRandomWord(data.filter((word) => word.active === true)));
   };
