@@ -7201,8 +7201,8 @@ export const data = [
   },
   {
     id: 1201,
-    word: "on's",
-    definition: "on siis?, kas on?",
+    word: "kass",
+    definition: "metskassist põlvnev pehme karvaga koduloom",
     active: true
   },
   {
@@ -8389,14 +8389,14 @@ export const data = [
   },
   {
     id: 1399,
-    word: "resp.",
-    definition: "(asjaoludele, olukorrale) vastavalt",
+    word: "siga",
+    definition: "sõrgadega keskmise suurusega loom; sellest liha saamiseks aretatud koduloom",
     active: true
   },
   {
     id: 1400,
-    word: "rit.",
-    definition: "(märge noodikirjas:) viivitades, tempot järk-järgult aeglustades",
+    word: "kabel",
+    definition: "väiksem usukultuslik ehitis (nt abikirik) või usukultuslik ruum",
     active: true
   },
   {
