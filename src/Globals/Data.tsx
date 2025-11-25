@@ -817,8 +817,8 @@ export const data = [
   },
   {
     id: 137,
-    word: "beež",
-    definition: "hallika, kollaka, roosaka vm varjundiga helepruun",
+    word: "tool",
+    definition: "nelja jalaga ja seljatoega iste ühe inimese jaoks",
     active: true
   },
   {
@@ -1111,8 +1111,8 @@ export const data = [
   },
   {
     id: 186,
-    word: "dušš",
-    definition: "vett pihustav seade, mille all või mille abil saab end pesta",
+    word: "nohik",
+    definition: "loomult tagasihoidlik, suhtluses tahaplaanile jääv inimene; saamatu inimene, tossike",
     active: true
   },
   {
@@ -1165,8 +1165,8 @@ export const data = [
   },
   {
     id: 195,
-    word: "düšess",
-    definition: "(praelisand:) plaadil spiraalikujuliste paladena küpsetatud kartulipüree",
+    word: "hiir",
+    definition: "väike, saleda keha ja pika sabaga näriline",
     active: true
   },
   {
@@ -1561,8 +1561,8 @@ export const data = [
   },
   {
     id: 261,
-    word: "emšer",
-    definition: "toorreovee esmase puhastustehnoloogiaga seade, mis on ette nähtud tahke-vedeliku eraldamiseks ja settinud muda kääritamiseks ja mõõtmiseks",
+    word: "saabas",
+    definition: "jalats, mille sääreosa ulatub üle pahkluu",
     active: true
   },
   {
@@ -1873,8 +1873,8 @@ export const data = [
   },
   {
     id: 313,
-    word: "fišüü",
-    definition: "lainetavalt langev peleriinikujuline krae naisterõivail 18. sajandi lõpus;",
+    word: "meheau",
+    definition: "meessoole omane väärikustunne",
     active: true
   },
   {
@@ -2017,8 +2017,8 @@ export const data = [
   },
   {
     id: 337,
-    word: "furšett",
-    definition: "serveerimisviis lühikesel püstijalavastuvõtul, mille puhul ühel või mitmel laual serveeritakse suupisteid vm kerget einet",
+    word: "magma",
+    definition: "hõõguvtuline silikaatne sulam, mis moodustub kolletena sügaval maakoores või vahevöö ülemises osas",
     active: true
   },
   {
@@ -2107,8 +2107,8 @@ export const data = [
   },
   {
     id: 352,
-    word: "geše",
-    definition: "akadeemiline kraad Tiibeti budismi gelukpa koolkonnas",
+    word: "kraad",
+    definition: "temperatuuri mõõtühik",
     active: true
   },
   {
@@ -2317,8 +2317,8 @@ export const data = [
   },
   {
     id: 387,
-    word: "hašš",
-    definition: "kanepitaime vaigutaolisest eritisest valmistatud narkootikum, mida suitsetatakse",
+    word: "sõrm",
+    definition: "üks viiest inimese käelaba pulgataolisest esiosast",
     active: true
   },
   {
