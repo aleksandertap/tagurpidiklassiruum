@@ -14,7 +14,9 @@ const colors = {
   correct: "bg-[#68FF4A]",
 };
 
-export default function AnswerField({ currentAttempt = "", correctWord = "" }) {
+export default function AnswerField({ currentAttempt = "", correctWord = "", showColors = false }) {
+  // tuleks funktsioon ümber teha sest hetkel kutsutakse see iga kord kui currentAttempt muutub.
+  // max 7-tähelise sõna puhul megaoluline ei ole, kuid optimeerimisruumi on.
   const getLetterBoxColor = (index) => {
     currentAttempt = currentAttempt.toLowerCase();
     correctWord = correctWord.toLowerCase();
@@ -64,8 +66,8 @@ export default function AnswerField({ currentAttempt = "", correctWord = "" }) {
       {correctWord.split("").map((_, i) => (
         <LetterBox
           key={i}
-          text={(currentAttempt.charAt(i) || "").toUpperCase()}
-          bgColor={getLetterBoxColor(i)}
+          text={(currentAttempt[i] || "").toUpperCase()}
+          bgColor={showColors ? getLetterBoxColor(i) : colors.neutral}
         />
       ))}
     </View>
