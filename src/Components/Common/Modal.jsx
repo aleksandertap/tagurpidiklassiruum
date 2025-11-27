@@ -26,6 +26,8 @@ const Modal = ({ showHistory, showGuide, wrongGuesses, data, onClose, isVisible 
       transparent={true}
       animationType="slide"
       onRequestClose={onClose}
+      statusBarTranslucent={true}
+      navigationBarTranslucent={true}
     >
       <View style={styles.modalOverlay}>
         <View className="p-6 bg-white rounded-lg shadow-lg justify-between items-center w-4/5">
