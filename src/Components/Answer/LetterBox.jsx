@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Pressable, Text } from "react-native";
 
 /**
@@ -10,21 +9,14 @@ import { Pressable, Text } from "react-native";
  */
 
 export default function LetterBox({ bgColor = "bg-[#E8E8E8]", onPress, text }) {
-  const [isTextVisible, setIsTextVisible] = useState(true);
-
-
   return (
     <Pressable
       className={`w-[50px] h-[50px] ${bgColor} flex items-center justify-center rounded-md`}
       onPress={onPress}
     >
-      {isTextVisible && (
-        <Text className="text-3xl font-semibold text-black text-center leading-[50px]">
-          {String(text || " ")
-            .toUpperCase()
-            .charAt(0)}
-        </Text>
-      )}
+      <Text className="text-3xl font-semibold text-black text-center leading-[50px]">
+        {text.toUpperCase().charAt(0)}
+      </Text>
     </Pressable>
   );
 }

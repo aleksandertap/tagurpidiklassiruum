@@ -129,7 +129,7 @@ const GameArea = () => {
         {/* esimene olema disabled vms, ja kuvab eelmist pakkumist */}
         <View className="py-5">
           {lastAttempt.length > 0 && (
-            <AnswerField correctWord={word} currentAttempt={lastAttempt} />
+            <AnswerField correctWord={word} currentAttempt={lastAttempt} showColors />
           )}
           <AnswerField correctWord={word} currentAttempt={currentAttempt} />
         </View>
