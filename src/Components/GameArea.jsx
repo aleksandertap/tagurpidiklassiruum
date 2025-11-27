@@ -4,22 +4,25 @@ import Modal from "@/src/Components/Common/Modal";
 import Icon from "@/src/Components/Icon/Icon.tsx";
 import GameKeyboard from "@/src/Components/Keyboard/GameKeyboard";
 import QuestionArea from "@/src/Components/Question/QuestionArea";
-import { deactivateWord, getRandomWord } from "@/src/Components/Utils/utils";
+import { getRandomWord } from "@/src/Components/Utils/utils";
 import { data } from "@/src/Globals/Data";
 import { rows } from "@/src/Globals/KeyboardRows";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
+import { loadCurrentWord, saveCurrentWord } from "./Utils/storage";
+
+
 
 const GameArea = () => {
   const [showGuide, setShowGuide] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [wrongGuesses, setWrongGuesses] = useState(0);
-
   const [currentWord, setCurrentWord] = useState({});
   const [currentAttempt, setCurrentAttempt] = useState("");
   const [lastAttempt, setLastAttempt] = useState("");
+  const [wordCounts, setWordCounts] = useState({});
 
   const handleInput = useCallback((key) => {
     const keyUpper = key.toUpperCase();
@@ -27,12 +30,26 @@ const GameArea = () => {
       setCurrentAttempt((prev) => prev + keyUpper);
     }
   }, []);
-
+  
   useEffect(() => {
-    const activeWords = data.filter((word) => word.active === true);
-    const randomWord = getRandomWord(activeWords);
-    setCurrentWord(randomWord);
+  const loadGameState = async () => {
+
+    const savedWord = await loadCurrentWord();
+    const savedCounts = JSON.parse(await AsyncStorage.getItem("wordCounts")) || {};
+    setWordCounts(savedCounts);
+
+    if (savedWord) {
+      setCurrentWord(savedWord);
+    } else {
+      const activeWords = data.filter(w => w.active === true);
+      const randomWord = getRandomWord(activeWords);
+      setCurrentWord(randomWord);
+      await saveCurrentWord(randomWord);
+    }
+  };
+  loadGameState();
   }, []);
+
 
   const { word, definition } = currentWord;
 
@@ -68,17 +85,27 @@ const GameArea = () => {
     setCurrentAttempt(currentAttempt.substring(0, currentAttempt.length - 1));
   };
 
-  const handleCorrectGuess = () => {
-    deactivateWord(data, currentWord.id);
-    setLastAttempt("");
+    const handleCorrectGuess = async () => {
     setCurrentAttempt("");
-    setCurrentWord(getRandomWord(data.filter((word) => word.active === true)));
-  };
+    const newWord = getRandomWord(data.filter(w => w.active === true));
+    setCurrentWord(newWord);
+    await saveCurrentWord(newWord);
+    };
 
-  const handleIncorrectGuess = () => {
+    const handleIncorrectGuess = async () => {
     setLastAttempt(currentAttempt);
     setCurrentAttempt("");
-  };
+    await saveCurrentWord(currentWord); // hoiab sõna alles
+
+    // uuenda sõna vale vastuste arvu
+    const newCounts = { ...wordCounts, [currentWord.word]: (wordCounts[currentWord.word] || 0) + 1 };
+    setWordCounts(newCounts);
+    await AsyncStorage.setItem("wordCounts", JSON.stringify(newCounts));
+
+    await saveCurrentWord(currentWord); // hoiab sõna alles
+
+    };
+    
 
   return (
     <View className="flex justify-between items-center w-full h-full pb-3">
@@ -94,7 +121,7 @@ const GameArea = () => {
             isVisible={modalVisible}
             showGuide={showGuide}
             showHistory={showHistory}
-            wrongGuesses={0}
+            correctCounts={wordCounts}
             data={data}
             onClose={() => setModalVisible(false)}
           />
