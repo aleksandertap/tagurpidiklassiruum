@@ -96,9 +96,9 @@ const GameArea = () => {
     await saveCurrentWord(currentWord); // hoiab sõna alles
 
     // uuenda sõna vale vastuste arvu
-    const newCounts = { ...wrongGuesses, [currentWord.word]: (wrongGuesses[currentWord.word] || 0) + 1 };
+    const newCounts = wrongGuesses + 1;
     setWrongGuesses(newCounts);
-    await AsyncStorage.setItem("wordCounts", JSON.stringify(newCounts));
+    await AsyncStorage.setItem("wrongGuesses", JSON.stringify(newCounts));
 
     await saveCurrentWord(currentWord); // hoiab sõna alles
 
@@ -119,7 +119,7 @@ const GameArea = () => {
             isVisible={modalVisible}
             showGuide={showGuide}
             showHistory={showHistory}
-            correctCounts={wordCounts}
+            wrongGuesses={wrongGuesses}
             data={data}
             onClose={() => setModalVisible(false)}
           />
