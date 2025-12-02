@@ -223,8 +223,8 @@ export const data = [
   },
   {
     id: 38,
-    word: "ah nii",
-    definition: "väljendab millegi teatavaksvõttu, tõdemist, üllatust vms",
+    word: "ahi",
+    definition: "kinnine tulekolle ruumi(de) kütmiseks",
     active: true
   },
   {
@@ -961,8 +961,8 @@ export const data = [
   },
   {
     id: 161,
-    word: "büdžett",
-    definition: "kulude ja tulude arvestus eelseisval ajavahemikul, raha kasutamise plaan teatavaks perioodiks (nt aastaks)",
+    word: "budism",
+    definition: "5.-6. sajandil eKr Indias tekkinud Buddhast lähtuv õpetus, mis kuulutab tõde kannatusest, kannatuse vaibumist ja seeläbi sellest vabanemist, sansaarat ja nirvaanat",
     active: true
   },
   {
@@ -1057,8 +1057,8 @@ export const data = [
   },
   {
     id: 177,
-    word: "doodž",
-    definition: "riigipea Veneetsias ja Genovas keskajal",
+    word: "doos",
+    definition: "kindlamõõduline kogus ravimit vm keemilist ainet, mida korraga tarbitakse",
     active: true
   },
   {
@@ -2539,8 +2539,8 @@ export const data = [
   },
   {
     id: 424,
-    word: "hodža",
-    definition: "feodalismiaegne õukondlase, kõrgvaimuliku, kõrgema ametniku või suurkaupmehe tiitel Lähis- ja Kesk-Ida islamimaades;",
+    word: "hoogne",
+    definition: "intensiivsuse, tõhususe ja kiirusega tehtav või toimuv; seda väljendav",
     active: true
   },
   {
@@ -3571,8 +3571,8 @@ export const data = [
   },
   {
     id: 596,
-    word: "jidiš",
-    definition: "keskajal Reini-äärsete saksa murrete baasil kujunenud, heebrea tähtedega kirjutatav heebrea, romaani ning slaavi keelte sugemetega germaani keel, Euroopa juutide kõne- ja kirjakeel",
+    word: "juurija",
+    definition: "(matemaatilises tehtes:) arv, mis näitab, millises astmes on juur",
     active: true
   },
   {
@@ -4015,8 +4015,8 @@ export const data = [
   },
   {
     id: 670,
-    word: "kabotša",
-    definition: "kõva ja mühkliku koorega väga magus väike kõrvits",
+    word: "kabend",
+    definition: "kabes tarvitatav mängunupp",
     active: true
   },
   {
@@ -4375,8 +4375,8 @@ export const data = [
   },
   {
     id: 730,
-    word: "ksv!",
-    definition: "sama üliõpilaskorporatsiooni liige, korporatsioonikaaslane;",
+    word: "kasv",
+    definition: "kasvamine, organismi ja ta osade massi ja mõõtmete suurenemine",
     active: true
   },
   {
@@ -6217,8 +6217,8 @@ export const data = [
   },
   {
     id: 1037,
-    word: "nišš",
-    definition: "seina sees olev õõnsus või süvend",
+    word: "nisse",
+    definition: "skandinaavia, eelkõige taani pärimuses esinev päkapikk, laudas või majas elutsev abistav vaimolend, kellele tuleb jõulude ajal putru viia",
     active: true
   },
   {
@@ -7651,8 +7651,8 @@ export const data = [
   },
   {
     id: 1276,
-    word: "pime!",
-    definition: "suurtükiväe ja laevastiku tuletoetuses vaatleja või tulesuunaja teade, et suurtüki või miinipilduja lasu tabamust ei nähtud",
+    word: "pime",
+    definition: "loodusliku või tehisliku valguseta, valgustamata; vähese (ebapiisava) valgustusega",
     active: true
   },
   {
@@ -10609,8 +10609,8 @@ export const data = [
   },
   {
     id: 1769,
-    word: "tüved",
-    definition: "wood in the rough whose volume is usually expressed in true cubic metres",
+    word: "tüvi",
+    definition: "puu koorega kaetud osa, mille ülemine osa haruneb oksteks",
     active: true
   },
   {
@@ -12241,8 +12241,8 @@ export const data = [
   },
   {
     id: 2041,
-    word: "õhušõu",
-    definition: "õhus toimuv vaatemäng, mis hõlmab nt õhusõidukite demo- või vigurlende või ka õhuakrobaatide, langevarjurite, purilendurite ja mudellendurite esitlusi",
+    word: "õhuhoki",
+    definition: "spetsiaalsel laual kahekesi mängitav mäng, kus libeda kettaga üritatakse litrit vastase väravasse lükata",
     active: true
   },
   {
