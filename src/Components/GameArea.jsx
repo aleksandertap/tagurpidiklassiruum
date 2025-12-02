@@ -7,12 +7,10 @@ import QuestionArea from "@/src/Components/Question/QuestionArea";
 import { deactivateWord, getRandomWord } from "@/src/Components/Utils/utils";
 import { data } from "@/src/Globals/Data";
 import { rows } from "@/src/Globals/KeyboardRows";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
-import { loadCurrentWord, saveCurrentWord } from "./Utils/storage";
-
-
+import { loadCurrentWord, saveCurrentWord, setArray, getArray } from "./Utils/storage";
 
 const GameArea = () => {
   const [showGuide, setShowGuide] = useState(false);
@@ -24,30 +22,39 @@ const GameArea = () => {
   const [lastAttempt, setLastAttempt] = useState("");
   const [wrongGuesses, setWrongGuesses] = useState(0);
 
+  const [guessedWords, setGuessedWords] = useState([]);
+  const [wordData, setWordData] = useState([]);
+
   const handleInput = useCallback((key) => {
     const keyUpper = key.toUpperCase();
     if (key.length === 1) {
       setCurrentAttempt((prev) => prev + keyUpper);
     }
   }, []);
-  
+
   useEffect(() => {
-  const loadGameState = async () => {
-    const savedCount = parseInt(await AsyncStorage.getItem("wrongGuesses")) || 0;
-    setWrongGuesses(savedCount);
+    const loadGameState = async () => {
+      const savedCount = parseInt(await AsyncStorage.getItem("wrongGuesses")) || 0;
+      setWrongGuesses(savedCount);
+      const savedGuessedWords = await getArray("guessedWords");
+      setGuessedWords(savedGuessedWords);
 
-    const savedWord = await loadCurrentWord();
-    if (savedWord) {
-      setCurrentWord(savedWord);
-    } else {
-      const randomWord = getRandomWord(data.filter(w => w.active));
-      setCurrentWord(randomWord);
-      await saveCurrentWord(randomWord);
-    }
-  };
-  loadGameState();
+      const savedData = await getArray("wordData");
+      const updatedData = savedData.length > 0 ? savedData : data;
+
+      setWordData(updatedData);
+
+      const savedWord = await loadCurrentWord();
+      if (savedWord) {
+        setCurrentWord(savedWord);
+      } else {
+        const randomWord = getRandomWord(updatedData.filter((w) => w.active));
+        setCurrentWord(randomWord);
+        await saveCurrentWord(randomWord);
+      }
+    };
+    loadGameState();
   }, []);
-
 
   const { word, definition } = currentWord;
 
@@ -83,27 +90,30 @@ const GameArea = () => {
     setCurrentAttempt(currentAttempt.substring(0, currentAttempt.length - 1));
   };
 
-    const handleCorrectGuess = async () => {
-    deactivateWord(data, currentWord.id);
+  const handleCorrectGuess = async () => {
+    const newWordList = JSON.parse(JSON.stringify(wordData));
+    deactivateWord(newWordList, currentWord.id);
+    await setArray("guessedWords", [...guessedWords, currentWord]);
+    await setArray("wordData", newWordList);
+    setWordData(newWordList);
     setLastAttempt("");
     setCurrentAttempt("");
-    setCurrentWord(getRandomWord(data.filter((word) => word.active === true)));
-    };
+    const newWord = getRandomWord(newWordList.filter((word) => word.active === true));
+    setCurrentWord(newWord);
+    await saveCurrentWord(newWord);
+  };
 
-    const handleIncorrectGuess = async () => {
+  const handleIncorrectGuess = async () => {
     setLastAttempt(currentAttempt);
     setCurrentAttempt("");
-    await saveCurrentWord(currentWord); // hoiab sõna alles
 
     // uuenda sõna vale vastuste arvu
-    const newCounts = { ...wrongGuesses, [currentWord.word]: (wrongGuesses[currentWord.word] || 0) + 1 };
+    const newCounts = wrongGuesses + 1;
     setWrongGuesses(newCounts);
-    await AsyncStorage.setItem("wordCounts", JSON.stringify(newCounts));
+    await AsyncStorage.setItem("wrongGuesses", JSON.stringify(newCounts));
 
     await saveCurrentWord(currentWord); // hoiab sõna alles
-
-    };
-    
+  };
 
   return (
     <View className="flex justify-between items-center w-full h-full pb-3">
@@ -119,8 +129,8 @@ const GameArea = () => {
             isVisible={modalVisible}
             showGuide={showGuide}
             showHistory={showHistory}
-            correctCounts={wordCounts}
-            data={data}
+            wrongGuesses={wrongGuesses}
+            data={wordData}
             onClose={() => setModalVisible(false)}
           />
         )}

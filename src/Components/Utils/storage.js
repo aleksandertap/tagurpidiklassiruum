@@ -18,6 +18,24 @@ export const loadCurrentWord = async () => {
   }
 };
 
+export const setArray = async (key, array) => {
+  try {
+    await AsyncStorage.setItem(key, JSON.stringify(array ?? []));
+  } catch (e) {
+    console.log(`Error saving array for key ${key}:`, e);
+  }
+};
+
+export const getArray = async (key) => {
+  try {
+    const array = await AsyncStorage.getItem(key);
+    return array ? JSON.parse(array) : [];
+  } catch (e) {
+    console.log(`Error getting array for key ${key}:`, e);
+    return [];
+  }
+};
+
 export const saveCount = async (word, count) => {
   try {
     const counts = JSON.parse(await AsyncStorage.getItem("wordCounts")) || {};
