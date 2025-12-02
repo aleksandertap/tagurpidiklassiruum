@@ -2,7 +2,7 @@ import AnswerField from "@/src/Components/Answer/AnswerField";
 import { Button } from "@/src/Components/Common/Button";
 import Modal from "@/src/Components/Common/Modal";
 import Icon from "@/src/Components/Icon/Icon.tsx";
-import GameKeyboard from "@/src/Components/Keyboard/GameKeyboard";
+import { GameKeyboard } from "@/src/Components/Keyboard/GameKeyboard";
 import QuestionArea from "@/src/Components/Question/QuestionArea";
 import { deactivateWord, getRandomWord } from "@/src/Components/Utils/utils";
 import { data } from "@/src/Globals/Data";
@@ -10,7 +10,12 @@ import { rows } from "@/src/Globals/KeyboardRows";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
-import { loadCurrentWord, saveCurrentWord, setArray, getArray } from "./Utils/storage";
+import {
+  loadCurrentWord,
+  saveCurrentWord,
+  setArray,
+  getArray,
+} from "./Utils/storage";
 
 const GameArea = () => {
   const [showGuide, setShowGuide] = useState(false);
@@ -25,6 +30,8 @@ const GameArea = () => {
   const [guessedWords, setGuessedWords] = useState([]);
   const [wordData, setWordData] = useState([]);
 
+  const [keyboardStates, setKeyboardStates] = useState({});
+
   const handleInput = useCallback((key) => {
     const keyUpper = key.toUpperCase();
     if (key.length === 1) {
@@ -34,7 +41,8 @@ const GameArea = () => {
 
   useEffect(() => {
     const loadGameState = async () => {
-      const savedCount = parseInt(await AsyncStorage.getItem("wrongGuesses")) || 0;
+      const savedCount =
+        parseInt(await AsyncStorage.getItem("wrongGuesses")) || 0;
       setWrongGuesses(savedCount);
       const savedGuessedWords = await getArray("guessedWords");
       setGuessedWords(savedGuessedWords);
@@ -98,7 +106,10 @@ const GameArea = () => {
     setWordData(newWordList);
     setLastAttempt("");
     setCurrentAttempt("");
-    const newWord = getRandomWord(newWordList.filter((word) => word.active === true));
+    setKeyboardStates({});
+    const newWord = getRandomWord(
+      newWordList.filter((word) => word.active === true),
+    );
     setCurrentWord(newWord);
     await saveCurrentWord(newWord);
   };
@@ -113,6 +124,15 @@ const GameArea = () => {
     await AsyncStorage.setItem("wrongGuesses", JSON.stringify(newCounts));
 
     await saveCurrentWord(currentWord); // hoiab sõna alles
+  };
+
+  const handleUpdate = (letterStates) => {
+    setKeyboardStates((prev) => {
+      return {
+        ...prev,
+        ...letterStates,
+      };
+    });
   };
 
   return (
@@ -139,7 +159,12 @@ const GameArea = () => {
         {/* esimene olema disabled vms, ja kuvab eelmist pakkumist */}
         <View className="py-5">
           {lastAttempt.length > 0 && (
-            <AnswerField correctWord={word} currentAttempt={lastAttempt} showColors />
+            <AnswerField
+              correctWord={word}
+              currentAttempt={lastAttempt}
+              onUpdate={handleUpdate}
+              showColors
+            />
           )}
           <AnswerField correctWord={word} currentAttempt={currentAttempt} />
         </View>
@@ -148,7 +173,11 @@ const GameArea = () => {
         <Button title="OK" onPress={handleGuess} />
         <Button title="<" style="gray" onPress={handleDelete} />
       </View>
-      <GameKeyboard rows={rows} onInput={handleInput} />
+      <GameKeyboard
+        rows={rows}
+        letterStates={keyboardStates}
+        onInput={handleInput}
+      />
     </View>
   );
 };
