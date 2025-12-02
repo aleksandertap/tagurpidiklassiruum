@@ -106,7 +106,6 @@ const GameArea = () => {
   const handleIncorrectGuess = async () => {
     setLastAttempt(currentAttempt);
     setCurrentAttempt("");
-    await saveCurrentWord(currentWord); // hoiab sõna alles
 
     // uuenda sõna vale vastuste arvu
     const newCounts = wrongGuesses + 1;
