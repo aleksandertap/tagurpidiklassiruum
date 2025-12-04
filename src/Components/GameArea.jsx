@@ -8,8 +8,9 @@ import { deactivateWord, getRandomWord } from "@/src/Components/Utils/utils";
 import { data } from "@/src/Globals/Data";
 import { rows } from "@/src/Globals/KeyboardRows";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
+import ConfettiCannon from 'react-native-confetti-cannon';
 import {
   getArray,
   loadCurrentWord,
@@ -32,6 +33,8 @@ const GameArea = () => {
   const [wordData, setWordData] = useState([]);
 
   const [keyboardStates, setKeyboardStates] = useState({});
+
+  const explosionRef = useRef(null);
 
   const handleInput = useCallback(
     (key) => {
@@ -116,12 +119,25 @@ const GameArea = () => {
   };
 
   const handleCorrectGuess = async () => {
+
+    explosionRef.current?.start();
+
+    const correctSlots = (currentWord.word || "").split("").map((char) => ({
+    char: char.toUpperCase(),
+    status: "locked",
+    }));
+    setSlots(correctSlots);
+
+  setLastAttempt("")
+
+    setTimeout(async () => {
     const newWordList = JSON.parse(JSON.stringify(wordData));
     deactivateWord(newWordList, currentWord.id);
     await setArray("guessedWords", [...guessedWords, currentWord]);
     await setArray("wordData", newWordList);
     setWordData(newWordList);
     setLastAttempt("");
+    
     // clear persisted slots for this word, then reset slots for next word
     try {
       const key = currentWord && currentWord.id ? `slots_${currentWord.id}` : `slots_${currentWord.word}`;
@@ -136,6 +152,7 @@ const GameArea = () => {
     );
     setCurrentWord(newWord);
     await saveCurrentWord(newWord);
+    }, 3000);
   };
 
   const handleIncorrectGuess = async (attempt) => {
@@ -305,6 +322,15 @@ const GameArea = () => {
         letterStates={keyboardStates}
         onInput={handleInput}
       />
+      <ConfettiCannon
+      count={200}
+      origin={{ x: -10, y: 0 }}
+      autoStart={false}
+      ref={explosionRef}
+      fadeOut={true}
+      explosionSpeed={500}
+      fallSpeed={3000}
+    />
     </View>
   );
 };
