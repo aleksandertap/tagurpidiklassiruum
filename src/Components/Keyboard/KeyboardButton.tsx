@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
+export type CurrentLetterState = "default" | "correct" | "present" | "disabled";
+
 type KeyboardButtonProps = {
   keyLabel: string;
   keyIndex: number;
   rowIndex: number;
-  state?: "default" | "correct" | "present" | "disabled";
+  state?: CurrentLetterState;
   onPress?: () => void;
 };
 

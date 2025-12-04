@@ -1,4 +1,5 @@
 import LetterBox from "@/src/Components/Answer/LetterBox.jsx";
+import { useEffect, useMemo } from "react";
 import { View } from "react-native";
 
 /**
@@ -9,65 +10,98 @@ import { View } from "react-native";
 
 const colors = {
   neutral: "bg-[#E8E8E8]",
-  incorrect: "bg-[#FF3D36]",
+  disabled: "bg-[#FF3D36]",
   present: "bg-[#FFB752]",
   correct: "bg-[#68FF4A]",
 };
 
-export default function AnswerField({ currentAttempt = "", correctWord = "", showColors = false }) {
-  // tuleks funktsioon ümber teha sest hetkel kutsutakse see iga kord kui currentAttempt muutub.
-  // max 7-tähelise sõna puhul megaoluline ei ole, kuid optimeerimisruumi on.
-  const getLetterBoxColor = (index) => {
-    currentAttempt = currentAttempt.toLowerCase();
-    correctWord = correctWord.toLowerCase();
+export default function AnswerField({
+  currentAttempt = "",
+  correctWord = "",
+  showColors = false,
+  transparent = false,
+  onUpdate = () => {},
+}) {
+  const attempt = currentAttempt.toLowerCase();
+  const correct = correctWord.toLowerCase();
 
-    if (!currentAttempt[index]) return colors.neutral;
+  const { colorResults, letterStates } = useMemo(() => {
+    const resultColors = [];
+    const letterCounts = {};
+    const states = {};
 
     // esmalt kogume kokku õige vastuse tähed
-    const letterCounts = {};
-    for (let i = 0; i < correctWord.length; i++) {
-      const l = correctWord[i];
+    for (let i = 0; i < correct.length; i++) {
+      const l = correct[i];
       letterCounts[l] = (letterCounts[l] || 0) + 1;
     }
 
-    // värvid mida kindlal indexil kasutada
-    const colorResults = [];
-
     // leiame õiged tähed
-    for (let i = 0; i < currentAttempt.length; i++) {
-      if (currentAttempt[i] === correctWord[i]) {
-        colorResults[i] = colors.correct;
-        letterCounts[currentAttempt[i]] -= 1;
+    for (let i = 0; i < attempt.length; i++) {
+      if (attempt[i] === correct[i]) {
+        resultColors[i] = colors.correct;
+        letterCounts[attempt[i]] -= 1;
       }
     }
 
     // kontrollime tähtede olemasolu
-    for (let i = 0; i < currentAttempt.length; i++) {
+    for (let i = 0; i < attempt.length; i++) {
       // kui tähe indexil on juba värv olemas (ehk täht on juba paigas), siis kontrolli järgmist tähte
-      if (colorResults[i]) continue;
+      if (resultColors[i]) continue;
 
-      if (letterCounts[currentAttempt[i]] > 0) {
+      const letter = attempt[i];
+
+      if (letterCounts[letter] > 0) {
         // kui täht on sõnas olemas, kuid lihtsalt vales kohas
-        colorResults[i] = colors.present;
-        letterCounts[currentAttempt[i]] -= 1;
+        resultColors[i] = colors.present;
+        letterCounts[letter] -= 1;
       } else {
         // kui tähte pole enam saadaval ja on vales kohas
-        colorResults[i] = colors.incorrect;
+        resultColors[i] = colors.disabled;
       }
     }
 
-    // loodetavasti on kõik ok ja tagastame värvid igal sõna tähe indexil
-    return colorResults[index];
+    // letterstate massiivi loomine
+    for (let i = 0; i < attempt.length; i++) {
+      const letter = attempt[i];
+
+      let state;
+      if (resultColors[i] === colors.correct) state = "correct";
+      else if (resultColors[i] === colors.present) state = "present";
+      else state = "disabled";
+
+      const previous = states[letter];
+      if (previous === "correct") continue;
+      if (previous === "present" && state === "disabled") continue;
+
+      states[letter] = state;
+    }
+
+    return {
+      colorResults: resultColors,
+      letterStates: states,
+    };
+  }, [attempt, correct]);
+
+  useEffect(() => {
+    onUpdate(letterStates);
+  }, [letterStates, onUpdate]);
+
+  const getLetterBoxColor = (index) => {
+    if (!showColors) return colors.neutral;
+    return colorResults[index] || colors.neutral;
   };
 
   return (
-    <View className="p-4 mx-4 flex flex-row justify-center gap-1">
+    <View
+      className={`p-4 mx-4 flex flex-row justify-center gap-1 ${transparent ? "opacity-50" : "opacity-100"}`}
+    >
       {/* Renders letter boxes for each character in the correctWord */}
       {correctWord.split("").map((_, i) => (
         <LetterBox
           key={i}
           text={(currentAttempt[i] || "").toUpperCase()}
-          bgColor={showColors ? getLetterBoxColor(i) : colors.neutral}
+          bgColor={getLetterBoxColor(i)}
         />
       ))}
     </View>
