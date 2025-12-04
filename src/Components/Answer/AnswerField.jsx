@@ -21,7 +21,32 @@ export default function AnswerField({
   showColors = false,
   transparent = false,
   onUpdate = () => {},
+  // New: controlled slots mode
+  slots = null, // optional array: [{ char: '', status: 'empty'|'filled'|'locked' }]
+  onUpdateSlot = null, // (index, char) => void
 }) {
+  // If slots are provided, operate in controlled mode: render boxes from slots
+  if (Array.isArray(slots)) {
+    return (
+      <View className="p-4 mx-4 flex flex-row justify-center gap-1">
+        {slots.map((s, i) => (
+          <LetterBox
+            key={i}
+            text={(s.char || "").toUpperCase()}
+            bgColor={s.status === "locked" ? colors.correct : s.status === "present" ? colors.present : s.status === "disabled" ? colors.disabled : colors.neutral}
+            locked={s.status === "locked"}
+            onPress={() => {
+              // allow toggling or focus only if not locked and an updater exists
+              if (s.status === "locked") return;
+              if (typeof onUpdateSlot === "function") onUpdateSlot(i, s.char || "");
+            }}
+          />
+        ))}
+      </View>
+    );
+  }
+
+  // Fallback: previous uncontrolled behavior (color evaluation from attempt)
   const attempt = currentAttempt.toLowerCase();
   const correct = correctWord.toLowerCase();
 
@@ -48,9 +73,7 @@ export default function AnswerField({
     for (let i = 0; i < attempt.length; i++) {
       // kui tähe indexil on juba värv olemas (ehk täht on juba paigas), siis kontrolli järgmist tähte
       if (resultColors[i]) continue;
-
       const letter = attempt[i];
-
       if (letterCounts[letter] > 0) {
         // kui täht on sõnas olemas, kuid lihtsalt vales kohas
         resultColors[i] = colors.present;

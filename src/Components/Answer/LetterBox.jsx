@@ -8,14 +8,17 @@ import { Pressable, Text } from "react-native";
  *  {boolean} setIsVisible - Optional prop to control visibility from parent.
  */
 
-export default function LetterBox({ bgColor = "bg-[#E8E8E8]", onPress, text }) {
+export default function LetterBox({ bgColor = "bg-[#E8E8E8]", onPress, text = "", locked = false }) {
+  // If locked, override bgColor to green and disable press
+  const appliedBg = locked ? "bg-[#68FF4A]" : bgColor;
+
   return (
     <Pressable
-      className={`w-[50px] h-[50px] ${bgColor} flex items-center justify-center rounded-md`}
-      onPress={onPress}
+      className={`w-[50px] h-[50px] ${appliedBg} flex items-center justify-center rounded-md`}
+      onPress={locked ? () => {} : onPress}
     >
       <Text className="text-3xl font-semibold text-black text-center leading-[50px]">
-        {text.toUpperCase().charAt(0)}
+        {String(text || "").toUpperCase().charAt(0)}
       </Text>
     </Pressable>
   );
