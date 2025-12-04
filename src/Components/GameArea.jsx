@@ -10,13 +10,8 @@ import { rows } from "@/src/Globals/KeyboardRows";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
-import ConfettiCannon from 'react-native-confetti-cannon';
-import {
-  getArray,
-  loadCurrentWord,
-  saveCurrentWord,
-  setArray,
-} from "./Utils/storage";
+import ConfettiCannon from "react-native-confetti-cannon";
+import { getArray, loadCurrentWord, saveCurrentWord, setArray } from "./Utils/storage";
 
 const GameArea = () => {
   const [showGuide, setShowGuide] = useState(false);
@@ -34,7 +29,9 @@ const GameArea = () => {
 
   const [keyboardStates, setKeyboardStates] = useState({});
 
-  const explosionRef = useRef(null);
+  const explosionRefLeft = useRef(null);
+  const explosionRefRight = useRef(null);
+  const [confettiActive, setConfettiActive] = useState(false);
 
   const handleInput = useCallback(
     (key) => {
@@ -50,13 +47,12 @@ const GameArea = () => {
         });
       }
     },
-    [setSlots],
+    [setSlots]
   );
 
   useEffect(() => {
     const loadGameState = async () => {
-      const savedCount =
-        parseInt(await AsyncStorage.getItem("wrongGuesses")) || 0;
+      const savedCount = parseInt(await AsyncStorage.getItem("wrongGuesses")) || 0;
       setWrongGuesses(savedCount);
       const savedGuessedWords = await getArray("guessedWords");
       setGuessedWords(savedGuessedWords);
@@ -119,39 +115,41 @@ const GameArea = () => {
   };
 
   const handleCorrectGuess = async () => {
-
-    explosionRef.current?.start();
-
+    setConfettiActive(true);
+    requestAnimationFrame(() => {
+      explosionRefLeft.current?.start();
+      explosionRefRight.current?.start();
+    });
     const correctSlots = (currentWord.word || "").split("").map((char) => ({
-    char: char.toUpperCase(),
-    status: "locked",
+      char: char.toUpperCase(),
+      status: "locked",
     }));
     setSlots(correctSlots);
 
-  setLastAttempt("")
+    setLastAttempt("");
 
     setTimeout(async () => {
-    const newWordList = JSON.parse(JSON.stringify(wordData));
-    deactivateWord(newWordList, currentWord.id);
-    await setArray("guessedWords", [...guessedWords, currentWord]);
-    await setArray("wordData", newWordList);
-    setWordData(newWordList);
-    setLastAttempt("");
-    
-    // clear persisted slots for this word, then reset slots for next word
-    try {
-      const key = currentWord && currentWord.id ? `slots_${currentWord.id}` : `slots_${currentWord.word}`;
-      await AsyncStorage.removeItem(key);
-    } catch (e) {
-      // ignore
-    }
-    setSlots([]);
-    setKeyboardStates({});
-    const newWord = getRandomWord(
-      newWordList.filter((word) => word.active === true)
-    );
-    setCurrentWord(newWord);
-    await saveCurrentWord(newWord);
+      const newWordList = JSON.parse(JSON.stringify(wordData));
+      deactivateWord(newWordList, currentWord.id);
+      await setArray("guessedWords", [...guessedWords, currentWord]);
+      await setArray("wordData", newWordList);
+      setWordData(newWordList);
+      setLastAttempt("");
+
+      // clear persisted slots for this word, then reset slots for next word
+      try {
+        const key =
+          currentWord && currentWord.id ? `slots_${currentWord.id}` : `slots_${currentWord.word}`;
+        await AsyncStorage.removeItem(key);
+      } catch (e) {
+        // ignore
+      }
+      setSlots([]);
+      setKeyboardStates({});
+      const newWord = getRandomWord(newWordList.filter((word) => word.active === true));
+      setCurrentWord(newWord);
+      await saveCurrentWord(newWord);
+      setConfettiActive(false);
     }, 3000);
   };
 
@@ -211,7 +209,8 @@ const GameArea = () => {
     // apply to state and persist immediately
     setSlots(nextSlots);
     try {
-      const key = currentWord && currentWord.id ? `slots_${currentWord.id}` : `slots_${currentWord.word}`;
+      const key =
+        currentWord && currentWord.id ? `slots_${currentWord.id}` : `slots_${currentWord.word}`;
       await AsyncStorage.setItem(key, JSON.stringify(nextSlots));
     } catch (e) {
       console.warn("Could not persist slots", e);
@@ -249,7 +248,8 @@ const GameArea = () => {
   // initialize slots when a new word is set
   useEffect(() => {
     if (!currentWord || !currentWord.word) return;
-    const key = currentWord && currentWord.id ? `slots_${currentWord.id}` : `slots_${currentWord.word}`;
+    const key =
+      currentWord && currentWord.id ? `slots_${currentWord.id}` : `slots_${currentWord.word}`;
     (async () => {
       try {
         const saved = await AsyncStorage.getItem(key);
@@ -263,14 +263,17 @@ const GameArea = () => {
       } catch (e) {
         // ignore and initialize blanks
       }
-      setSlots(Array.from({ length: currentWord.word.length }, () => ({ char: "", status: "empty" })));
+      setSlots(
+        Array.from({ length: currentWord.word.length }, () => ({ char: "", status: "empty" }))
+      );
     })();
   }, [currentWord]);
 
   // persist slots on change (keeps typing/deletes saved)
   useEffect(() => {
     if (!currentWord || !currentWord.word) return;
-    const key = currentWord && currentWord.id ? `slots_${currentWord.id}` : `slots_${currentWord.word}`;
+    const key =
+      currentWord && currentWord.id ? `slots_${currentWord.id}` : `slots_${currentWord.word}`;
     AsyncStorage.setItem(key, JSON.stringify(slots || [])).catch(() => {});
   }, [slots, currentWord?.id]);
 
@@ -306,31 +309,35 @@ const GameArea = () => {
               transparent
             />
           )}
-          <AnswerField
-            correctWord={word}
-            slots={slots}
-            onUpdateSlot={handleUpdateSlot}
-          />
+          <AnswerField correctWord={word} slots={slots} onUpdateSlot={handleUpdateSlot} />
         </View>
       </View>
       <View className="flex-row justify-between w-screen px-[35px]">
         <Button title="OK" onPress={handleGuess} />
         <Button title="<" style="gray" onPress={handleDelete} />
       </View>
-      <GameKeyboard
-        rows={rows}
-        letterStates={keyboardStates}
-        onInput={handleInput}
+      <GameKeyboard rows={rows} letterStates={keyboardStates} onInput={handleInput} />
+      {confettiActive && (
+        <>
+        <ConfettiCannon
+        count={25}
+        origin={{ x: -10, y: 0 }}
+        autoStart={false}
+        ref={ explosionRefLeft }
+        fadeOut={true}
+        explosionSpeed={1500}
+        fallSpeed={1500}
       />
       <ConfettiCannon
-      count={200}
-      origin={{ x: -10, y: 0 }}
-      autoStart={false}
-      ref={explosionRef}
-      fadeOut={true}
-      explosionSpeed={500}
-      fallSpeed={3000}
-    />
+        count={25}
+        origin={{ x: 410, y: 0 }}
+        autoStart={false}
+        ref={ explosionRefRight }
+        fadeOut={true}
+        explosionSpeed={1500}
+        fallSpeed={1500}
+      />
+      </>)}
     </View>
   );
 };
