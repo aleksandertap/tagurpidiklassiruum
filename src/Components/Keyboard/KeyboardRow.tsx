@@ -31,7 +31,6 @@ export const KeyboardRow = ({ keys, rowIndex }: KeyboardRowProps) => {
           state={getKeyState(key)}
           onPress={() => {
             keyboard.onKeyPress(key, rowIndex, keyIndex);
-            console.log(keyboard);
           }}
         />
       ))}
