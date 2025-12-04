@@ -1,6 +1,6 @@
 import LetterBox from "@/src/Components/Answer/LetterBox.jsx";
+import { useEffect, useMemo } from "react";
 import { View } from "react-native";
-import { useMemo, useEffect } from "react";
 
 /**
  * Component to display the answer field with letter boxes.
@@ -19,6 +19,7 @@ export default function AnswerField({
   currentAttempt = "",
   correctWord = "",
   showColors = false,
+  transparent = false,
   onUpdate = () => {},
 }) {
   const attempt = currentAttempt.toLowerCase();
@@ -92,7 +93,9 @@ export default function AnswerField({
   };
 
   return (
-    <View className="p-4 mx-4 flex flex-row justify-center gap-1">
+    <View
+      className={`p-4 mx-4 flex flex-row justify-center gap-1 ${transparent ? "opacity-50" : "opacity-100"}`}
+    >
       {/* Renders letter boxes for each character in the correctWord */}
       {correctWord.split("").map((_, i) => (
         <LetterBox

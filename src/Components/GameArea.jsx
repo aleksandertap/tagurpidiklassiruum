@@ -11,10 +11,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import {
+  getArray,
   loadCurrentWord,
   saveCurrentWord,
   setArray,
-  getArray,
 } from "./Utils/storage";
 
 const GameArea = () => {
@@ -108,7 +108,7 @@ const GameArea = () => {
     setCurrentAttempt("");
     setKeyboardStates({});
     const newWord = getRandomWord(
-      newWordList.filter((word) => word.active === true),
+      newWordList.filter((word) => word.active === true)
     );
     setCurrentWord(newWord);
     await saveCurrentWord(newWord);
@@ -164,6 +164,7 @@ const GameArea = () => {
               currentAttempt={lastAttempt}
               onUpdate={handleUpdate}
               showColors
+              transparent
             />
           )}
           <AnswerField correctWord={word} currentAttempt={currentAttempt} />
