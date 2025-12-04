@@ -36,22 +36,3 @@ export const getArray = async (key) => {
   }
 };
 
-export const saveCount = async (word, count) => {
-  try {
-    const counts = JSON.parse(await AsyncStorage.getItem("wordCounts")) || {};
-    counts[word] = count;
-    await AsyncStorage.setItem("wordCounts", JSON.stringify(counts));
-  } catch (e) {
-    console.log("Error saving count:", e);
-  }
-};
-
-export const getCount = async (word) => {
-  try {
-    const counts = JSON.parse(await AsyncStorage.getItem("wordCounts")) || {};
-    return counts[word] || 0;
-  } catch (e) {
-    console.log("Error getting count:", e);
-    return 0;
-  }
-};
